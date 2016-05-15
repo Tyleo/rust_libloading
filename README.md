@@ -22,7 +22,7 @@ To load a library you can use any of the `Lib`, `LibTracked`, or `LibUnsafe` `st
 [choosing_your_guarantees]: https://tyleo.github.io/sharedlib/target/doc/sharedlib/index.html#choosing-your-guarantees
 
 ### Calling a function in another library
-```norun
+```rust
 unsafe {
     let path_to_lib = "examplelib.dll";
     let lib = try!(Lib::new(path_to_lib));
@@ -33,7 +33,7 @@ unsafe {
 ```
 
 ### Accessing data in another library
-```norun
+```rust
 unsafe {
     let path_to_lib = "examplelib.dll";
     let lib = try!(Lib::new(path_to_lib));
