@@ -17,7 +17,7 @@ Based on [libloading](https://crates.io/crates/libloading) by Simonas Kazlauskas
 sharedlib is a crate for loading shared libraries at runtime. This is a useful primitive for implementing other things like plugins. The advantage of this crate over other shared library crates is that it provides both lifetime-bound and ref-counted libraries, and it allows both functions and data to be loaded.
 
 # Quickstart
-To load a library you can use any of the `Lib`, `LibTracked`, or `LibUnsafe` `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide, see the [choosing your guarantees][choosing_your_guarantees] section in the docs. We use `Lib` for the examples below:
+To load a library you can use any of the `Lib`, `LibTracked`, or `LibUnsafe` `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide see the [choosing your guarantees][choosing_your_guarantees] section in the docs. We use `Lib` for the examples below:
 
 [choosing_your_guarantees]: https://tyleo.github.io/sharedlib/target/doc/sharedlib/index.html#choosing-your-guarantees
 
