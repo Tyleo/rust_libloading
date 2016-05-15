@@ -1,5 +1,5 @@
 [dependencies]
-define_error = "1.0"
+define_error = "2"
 kernel32-sys = "0.2"
 lazy_static = "0.2"
 winapi = "0.2"
@@ -19,4 +19,4 @@ keywords = [
 license = "ISC"
 name = "sharedlib"
 repository = "https://github.com/Tyleo/sharedlib.git"
-version = "0.2.1"
+version = "2.1.0"
