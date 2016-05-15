@@ -4,12 +4,14 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use string::error::os_error_failure as string;
 
+/// An error which occurs when an operating system function fails and no information is available.
 #[derive(Debug)]
 pub struct OsErrorFailure {
     function_called: String,
 }
 
 impl OsErrorFailure {
+    /// Creates a new [OsErrorFailure](struct.OsErrorFailure.html).
     pub fn new(function_called: String) -> Self {
         OsErrorFailure {
             function_called: function_called,

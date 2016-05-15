@@ -4,6 +4,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use string::error::os_error as string;
 
+/// An error which occurs when an operating system function fails.
 #[derive(Debug)]
 pub struct OsError {
     cause: String,
@@ -11,6 +12,7 @@ pub struct OsError {
 }
 
 impl OsError {
+    /// Creates a new [OsError](struct.OsError.html).
     pub fn new(cause: String, function_called: String) -> Self {
         OsError {
             cause: cause,

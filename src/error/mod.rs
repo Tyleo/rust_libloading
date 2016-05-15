@@ -1,3 +1,5 @@
+//! Defines errors which may be returned by [sharedlib](index.html).
+
 mod os_error;
 
 mod os_error_failure;

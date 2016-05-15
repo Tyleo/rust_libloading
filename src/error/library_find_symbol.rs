@@ -4,6 +4,7 @@ use std::fmt::Display;
 use std::fmt::Formatter;
 use string::error::library_find_symbol as string;
 
+/// An error which occurs when a symbol cannot be found in a shared library.
 #[derive(Debug)]
 pub struct LibraryFindSymbol {
     cause: Box<Error>,
@@ -11,6 +12,7 @@ pub struct LibraryFindSymbol {
 }
 
 impl LibraryFindSymbol {
+    /// Creates a new [LibraryFindSymbol](struct.LibraryFindSymbol.html).
     pub fn new(cause: Box<Error>, symbol: String) -> Self {
         LibraryFindSymbol {
             cause: cause,

@@ -5,6 +5,7 @@ use std::fmt::Formatter;
 use std::path::PathBuf;
 use string::error::library_open as string;
 
+/// An error which occurs when a shared library fails to open.
 #[derive(Debug)]
 pub struct LibraryOpen {
     cause: Box<Error>,
@@ -12,6 +13,7 @@ pub struct LibraryOpen {
 }
 
 impl LibraryOpen {
+    /// Creates a new [LibraryOpen](struct.LibraryOpen.html).
     pub fn new(cause: Box<Error>, path_to_lib: PathBuf) -> Self {
         LibraryOpen {
             cause: cause,
