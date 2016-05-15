@@ -77,7 +77,7 @@ impl Drop for Lib {
     fn drop(&mut self) {
         util::error_guard(
             || {
-                if unsafe { kernel32::FreeLibrary(self.handle) == 0 } {
+                if unsafe { kernel32::FreeLibrary(self.handle) } == 0 {
                     None
                 } else {
                     Some(())

@@ -5,9 +5,6 @@
 //! Based on [libloading](https://nagisa.github.io/rust_libloading/) by Simonas Kazlauskas.
 //!
 //! # TODO
-//! * Complete error implementations.
-//! * Add error guards in Unix
-//! * Make sure all functions are styled properly
 //! * Comparison to other crates
 //! * Document
 //! * Testing and build system
