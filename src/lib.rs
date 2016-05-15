@@ -1,13 +1,8 @@
-//! A cross-platform library loader which is realistic about safety guarantees.
+//! A cross-platform library loader.
 //!
-//! ([crates.io](https://crates.io/crates/sharedlib)) ([github](https://github.com/Tyleo/shared_lib))
+//! ([crates.io](https://crates.io/crates/sharedlib)) ([github](https://github.com/Tyleo/sharedlib))
 //!
-//! Based on [libloading](https://nagisa.github.io/rust_libloading/) by Simonas Kazlauskas.
-//!
-//! # TODO
-//! * Comparison to other crates
-//! * Document
-//! * Testing and build system
+//! Based on [libloading](https://crates.io/crates/libloading) by Simonas Kazlauskas.
 //!
 //! # Loading a library
 //! To load a library you can use any of the [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), or [LibUnsafe](struct.LibUnsafe.html) `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide, see the [chosing your guarantees](index.html#choosing-your-guarantees) section, below. We use [Lib](struct.Lib.html) for the examples below.
@@ -84,6 +79,11 @@
 //! For convienience, the second example is provided as the `find_func` method, which does this error-prone conversion behind the scenes.
 //!
 //! # Comparison with other crates for loabing shared libraries
+//! sharedlib was created out of frusteration with the existing crates for loading shared libraries. Below is a list of some of these crates with some information abuot how sharedlib improves upon them.
+//!
+//! * [dylib](https://crates.io/crates/dylib) provides an extremely simple interface for loading shared libraries. For awhile, this was the standard for loading shared libraries at runtime. Unfortunately, development on dylib has been mostly abandoned and it is no longer supported on the latest versions of the rust compiler.
+//!
+//! * [libloading](https://crates.io/crates/libloading) provides some additional safety guarantees on top of [dylib](https://crates.io/crates/dylib). [sharedlib](https://crates.io/crates/sharedlib) even started as a fork of [libloading](https://crates.io/crates/libloading). Unfortunately the interface [libloading](https://crates.io/crates/libloading) provides is extremely inflexible, requiring clients to transmute symbols so they can be used in `struct`s. Additionally, loading data does not work with this library which is a non-starter for many projects.
 //!
 //! # Frequently asked questions
 //!
@@ -92,6 +92,9 @@
 //!
 //! ### Doesn't rust already provide linking against shared libraries?
 //! While rust provides linking against shared libraries, it does not provide the ability to load them at runtime. If you only want to use shared libraries that you know about before runtime, you may find not find this crate very useful. On the other hand, if you wish to load something at runtime, like a plugin, you are in the right place.
+//! # TODO
+//! * Document
+//! * Testing and build system
 
 #[macro_use]
 extern crate define_error;

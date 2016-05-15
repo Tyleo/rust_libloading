@@ -7,14 +7,14 @@ winapi = "0.2"
 [package]
 authors = ["Simonas Kazlauskas <git@kazlauskas.me>", "Tyler Wolf Leonhardt <tyler.wolf.leonhardt@gmail.com>"]
 build = "build.rs"
-description = "A cross-platform shared library loader which is realistic about safety guarantees."
+description = "A cross-platform shared library loader."
 documentation = "https://tyleo.github.io/sharedlib/"
 keywords = [
     "dll",
-    "dynamic",
+    "dylib",
+    "libloading",
     "library",
-    "shared",
-    "lib"
+    "shared"
 ]
 license = "ISC"
 name = "sharedlib"
