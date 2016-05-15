@@ -8,7 +8,7 @@
 //! To load a library you can use any of the [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), or [LibUnsafe](struct.LibUnsafe.html) `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide, see the [chosing your guarantees](index.html#choosing-your-guarantees) section, below. We use [Lib](struct.Lib.html) for the examples below.
 //!
 //! ### Calling a function in another library
-//! ```
+//! ```no_run
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -19,7 +19,7 @@
 //! ```
 //!
 //! ### Accessing data in another library
-//! ```
+//! ```no_run
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -44,7 +44,7 @@
 //! ### Avoid copying or moving data returned from `get()`
 //! The [get](trait.Symbol.html#method.get) method on [Symbol](trait.Symbol.html) returns a transmuted pointer to something in a loaded library. While [sharedlib](index.html) tries to make sure that this pointer cannot outlive the library it is from, full protection is impossible. In particular: if a loaded `struct` contains pointers to things in the loaded library, and the loaded `struct` implements `Clone`, clients can clone the `struct` and make it to live longer than the library it is from. If this happens the pointers in the `struct` dangle. The example below demonstrate:
 //!
-//! ```
+//! ```no_run
 //! unsafe {
 //!     let some_func = {
 //!         let lib = try!(Lib::new("examplelib.dll"));
@@ -60,7 +60,7 @@
 //! ### Use the correct method when getting functions or data
 //! Each library provides two different ways to get symbols from shared libraries. One way is `find_func`, and the other is `find_data`. Two functions are provded because `find_data` needs to return a reference to a `T` rather than a `T` itself, while `find_func` just needs to return a `T` itself. Returning the wrong thing can cause some complications. For instance: suppose we only have the `find_data` method, and we want to get a function pointer with the signature `fn()`. We are inclined to call `lib.find_data::<fn()>(b"some_func")`. This searches the memory of the loaded binary and finds the address of the first line of the function `some_func`. Next, the *contents* of the first line of `some_func` are treated as a function pointer rather than the *address* of the first line of `some_func`. When the first line of `some_func` is returned it is incorrectly cast into a function pointer. Calling it produces undefined behavior. The example below demonstrates:
 //!
-//! ```
+//! ```no_run
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
 //!     let some_func_symbol: Symbol<extern "C" fn()> = try!(lib.find_data(b"some_func"));
@@ -73,7 +73,7 @@
 //!
 //! The correct way to do this with `find_data` is as follows:
 //!
-//! ```
+//! ```no_run
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
 //!     // Get a pointer to the block of memory at "some_func", this is the function itself.
