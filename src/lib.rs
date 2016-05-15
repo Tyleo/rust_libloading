@@ -1,4 +1,4 @@
-//! A cross-platform library loader.
+//! A simple cross-platform library loader.
 //!
 //! ([crates.io](https://crates.io/crates/sharedlib)) ([github](https://github.com/Tyleo/sharedlib))
 //!
