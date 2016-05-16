@@ -10,7 +10,7 @@ A cross-platform shared library loader.
 ([crates.io][crate]) ([docs][docs])
 
 [crate]: https://crates.io/crates/sharedlib
-[docs]: https://tyleo.github.io/sharedlib/target/doc/sharedlib/index.html
+[docs]: https://tyleo.github.io/sharedlib/
 
 Based on [libloading](https://crates.io/crates/libloading) by Simonas Kazlauskas.
 
