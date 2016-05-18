@@ -8,7 +8,12 @@
 //! To load a library you can use any of the [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), or [LibUnsafe](struct.LibUnsafe.html) `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide, see the [chosing your guarantees](index.html#choosing-your-guarantees) section, below. We use [Lib](struct.Lib.html) for the examples below.
 //!
 //! ### Calling a function in another library
-//! ```norun
+//! ``` no_run
+//! # use sharedlib::Func;
+//! # use sharedlib::Lib;
+//! # use sharedlib::SharedlibResult as R;
+//! # use sharedlib::Symbol;
+//! # fn test() -> R<()> {
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -16,10 +21,17 @@
 //!     let hello_world = hello_world_symbol.get();
 //!     hello_world();
 //! }
+//! # Ok(())
+//! # }
 //! ```
 //!
 //! ### Accessing data in another library
-//! ```norun
+//! ``` no_run
+//! # use sharedlib::Data;
+//! # use sharedlib::Lib;
+//! # use sharedlib::SharedlibResult as R;
+//! # use sharedlib::Symbol;
+//! # fn test() -> R<()> {
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -27,6 +39,8 @@
 //!     let my_usize = my_usize_symbol.get();
 //!     assert_eq!(*my_usize, 0);
 //! }
+//! # Ok(())
+//! # }
 //! ```
 //!
 //! ### Choosing your guarantees
@@ -44,11 +58,16 @@
 //! ### Avoid copying or moving data returned from `get()`
 //! The [get](trait.Symbol.html#method.get) method on [Symbol](trait.Symbol.html) returns a transmuted pointer to something in a loaded library. While [sharedlib](index.html) tries to make sure that this pointer cannot outlive the library it is from, full protection is impossible. In particular: if a loaded `struct` contains pointers to things in the loaded library, and the loaded `struct` implements `Clone`, clients can clone the `struct` and make it to live longer than the library it is from. If this happens the pointers in the `struct` dangle. The example below demonstrate:
 //!
-//! ```norun
+//! ``` no_run
+//! # use sharedlib::Func;
+//! # use sharedlib::Lib;
+//! # use sharedlib::SharedlibResult as R;
+//! # use sharedlib::Symbol;
+//! # fn test() -> R<()> {
 //! unsafe {
 //!     let some_func = {
 //!         let lib = try!(Lib::new("examplelib.dll"));
-//!         let some_func_symbol: Func<extern "C" fn()> = try!(lib.find_func(b"some_func"));
+//!         let some_func_symbol: Func<extern "C" fn()> = try!(lib.find_func("some_func"));
 //!         // All func pointers implement `Copy` so we can duplicate one.
 //!         some_func_symbol.get()
 //!         // lib goes out of scope here.
@@ -56,34 +75,50 @@
 //!     // Undefined behavior
 //!     some_func();
 //! }
+//! # Ok(())
+//! # }
 //! ```
 //! ### Use the correct method when getting functions or data
 //! Each library provides two different ways to get symbols from shared libraries. One way is `find_func`, and the other is `find_data`. Two functions are provded because `find_data` needs to return a reference to a `T` rather than a `T` itself, while `find_func` just needs to return a `T` itself. Returning the wrong thing can cause some complications. For instance: suppose we only have the `find_data` method, and we want to get a function pointer with the signature `fn()`. We are inclined to call `lib.find_data::<fn()>(b"some_func")`. This searches the memory of the loaded binary and finds the address of the first line of the function `some_func`. Next, the *contents* of the first line of `some_func` are treated as a function pointer rather than the *address* of the first line of `some_func`. When the first line of `some_func` is returned it is incorrectly cast into a function pointer. Calling it produces undefined behavior. The example below demonstrates:
 //!
-//! ```norun
+//! ``` no_run
+//! # use sharedlib::Data;
+//! # use sharedlib::Lib;
+//! # use sharedlib::SharedlibResult as R;
+//! # use sharedlib::Symbol;
+//! # fn test() -> R<()> {
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
-//!     let some_func_symbol: Data<extern "C" fn()> = try!(lib.find_data(b"some_func"));
+//!     let some_func_symbol: Data<extern "C" fn()> = try!(lib.find_data("some_func"));
 //!     // some_func actually points to a function but rust thinks it points to a function pointer.
 //!     let some_func = some_func_symbol.get();
 //!     // Undefined behavior
 //!     some_func();
 //! }
+//! # Ok(())
+//! # }
 //! ```
 //!
 //! The correct way to do this with `find_data` is as follows:
 //!
-//! ```norun
+//! ``` no_run
+//! # use sharedlib::Data;
+//! # use sharedlib::Lib;
+//! # use sharedlib::SharedlibResult as R;
+//! # use sharedlib::Symbol;
+//! # fn test() -> R<()> {
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
 //!     // Get a pointer to the block of memory at "some_func", this is the function itself.
-//!     let some_func_symbol: Data<u8> = try!(lib.find_data(b"some_func"));
+//!     let some_func_symbol: Data<u8> = try!(lib.find_data("some_func"));
 //!     // The type of some_func is &u8, a reference to the first byte of `some_func`. We can convert this into a function pointer.
 //!     let some_func = some_func_symbol.get();
 //!     let some_func_ptr: extern "C" fn() = std::mem::transmute(some_func);
 //!     // This works now.
 //!     some_func_ptr();
 //! }
+//! # Ok(())
+//! # }
 //! ```
 //!
 //! For convienience, the second example is provided as the `find_func` method, which does this error-prone conversion behind the scenes.
