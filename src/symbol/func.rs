@@ -9,6 +9,8 @@ pub struct Func<'a, T> {
 }
 
 impl <'a, T> Func<'a, T> {
+    /// Creates a new [Func](struct.Func.html).
+    /// This should only be called within the library.
     pub fn new(func: FuncUnsafe<T>) -> Self {
         Func {
             func: func,

@@ -6,6 +6,7 @@ use std::mem;
 use std::path::Path;
 
 /// A shared library which uses bound lifetimes to track its [Symbols](trait.Symbol.html).
+/// The inner library cannot be dropped if at least one loose symbol exists.
 #[derive(Debug)]
 pub struct Lib {
     inner: LibUnsafe,

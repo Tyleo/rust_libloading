@@ -8,6 +8,8 @@ pub struct Data<'a, T>
 }
 
 impl <'a, T> Data<'a, T> {
+    /// Creates a new [Data](struct.Data.html).
+    /// This should only be called within the library.
     pub fn new(data: &'a T) -> Self {
         Data {
             data: data,

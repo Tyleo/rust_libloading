@@ -11,6 +11,8 @@ pub struct DataTracked<T, TLib> {
 
 impl <T, TLib> DataTracked<T, TLib>
     where TLib: AsRef<LibUnsafe> + Clone {
+    /// Creates a new [DataTracked](struct.DataTracked.html).
+    /// This should only be called within the library.
     pub fn new(data: DataUnsafe<T>, lib: TLib) -> Self {
         DataTracked {
             data: data,

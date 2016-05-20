@@ -9,6 +9,8 @@ pub struct FuncTracked<T, TLib> {
 }
 
 impl <T, TLib> FuncTracked<T, TLib> {
+    /// Creates a new [FuncTracked](struct.FuncTracked.html).
+    /// This should only be called within the library.
     pub fn new(func: FuncUnsafe<T>, lib: TLib) -> Self {
         FuncTracked {
             func: func,

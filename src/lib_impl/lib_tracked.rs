@@ -5,6 +5,7 @@ use SharedlibResult as R;
 use std::path::Path;
 
 /// A shared library which which allows a user-provided ref-counting implementation to track its [Symbols](trait.Symbol.html).
+/// The inner library will not be droped until all of teh ref-counts are dropped.
 #[derive(Clone, Debug)]
 pub struct LibTracked<TLib> {
     inner: TLib,

@@ -7,6 +7,7 @@ use std::path::Path;
 use util;
 
 /// A shared library which does not track its [Symbols](trait.Symbol.html).
+/// The inner library may be dropped at any time, even if it has loose symbols.
 #[derive(Debug)]
 pub struct LibUnsafe {
     inner: InnerLib,

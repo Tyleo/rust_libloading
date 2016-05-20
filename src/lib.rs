@@ -42,8 +42,6 @@
 //! # Ok(())
 //! # }
 //! ```
-//! ### Creating a library which can be loaded
-//! Loading a library requires that the names and the types of the symbols that will be loaded be available. While this is possible for arbitrary symbols it may be difficult because they may have mangled names.
 //!
 //! ### Choosing your guarantees
 //! A common problem when loading a shared library at runtime is that a symbol may be accessed after its library has been unloaded. [sharedlib](index.html) attempts to prevent this by allowing the lifetime of the library to be tracked. Each of the different libraries, [LibUnsafe](struct.LibUnsafe.html), [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), [LibArc](type.LibArc.html), or [LibRc](type.LibRc.html), provides a different tracking mechanism. Below is a small overview. For more information, see the struct level documentation.
