@@ -18,7 +18,7 @@ pub struct Lib {
 }
 
 impl Lib {
-    pub fn new<TPath>(path_to_lib: TPath) -> R<Lib>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Lib>
         where TPath: AsRef<Path> {
         let path_to_lib_vec: Vec<_> =
             path_to_lib
@@ -31,7 +31,7 @@ impl Lib {
 
         util::error_guard(
             || {
-                let handle = unsafe { kernel32::LoadLibraryW(path_to_lib_ptr) };
+                let handle = kernel32::LoadLibraryW(path_to_lib_ptr);
                 let lib_option =
                     if handle.is_null()  {
                         None

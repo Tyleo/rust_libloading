@@ -13,7 +13,7 @@ pub trait OkOrGetLastError<T> {
 impl <T> OkOrGetLastError<T> for Option<T> {
     fn ok_or_get_last_error<TStr>(self, function: TStr) -> R<T>
         where TStr: AsRef<str> {
-       match self {
+        match self {
             Some(some) => Ok(some),
             None => {
                 match unsafe { kernel32::GetLastError() } {

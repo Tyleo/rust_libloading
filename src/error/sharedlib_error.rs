@@ -6,17 +6,17 @@ use std::fmt::Result;
 
 define_error!(
     #[derive(Debug)]
-    #[doc="The error type returned when a function in [sharedlib](index.html) fails."]
+    #[doc="An error returned when a function in [sharedlib](index.html) fails. Other errors are wrapped in this enum before being returned."]
     pub error SharedlibError {
-        #[doc="Wraps the [LibraryClose](struct.LibraryClose.html) error type into a [SharedlibError](enum.SharedlibError.html)."]
+        #[doc="Wraps a `LibraryClose` error in a [SharedlibError](enum.SharedlibError.html)."]
         suberror LibraryClose,
-        #[doc="Wraps the [LibraryFindSymbol](struct.LibraryFindSymbol.html) error type into a [SharedlibError](enum.SharedlibError.html)."]
+        #[doc="Wraps a `LibraryFindSymbol` error in a [SharedlibError](enum.SharedlibError.html)."]
         suberror LibraryFindSymbol,
-        #[doc="Wraps the [LibraryOpen](struct.LibraryOpen.html) error type into a [SharedlibError](enum.SharedlibError.html)."]
+        #[doc="Wraps a `LibraryOpen` error in a [SharedlibError](enum.SharedlibError.html)."]
         suberror LibraryOpen,
-        #[doc="Wraps the [OsError](struct.OsError.html) error type into a [SharedlibError](enum.SharedlibError.html)."]
+        #[doc="Wraps a `OsError` error in a [SharedlibError](enum.SharedlibError.html)."]
         suberror OsError,
-        #[doc="Wraps the [OsErrorFailure](struct.OsErrorFailure.html) error type into a [SharedlibError](enum.SharedlibError.html)."]
+        #[doc="Wraps a `OsErrorFailure` error in a [SharedlibError](enum.SharedlibError.html)."]
         suberror OsErrorFailure
     }
 );

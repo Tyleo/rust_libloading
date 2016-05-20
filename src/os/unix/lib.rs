@@ -18,7 +18,7 @@ pub struct Lib {
 }
 
 impl Lib {
-    pub fn new<TPath>(path_to_lib: TPath) -> R<Lib>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Lib>
         where TPath: AsRef<Path> {
         let path_to_lib_str =
             path_to_lib
@@ -28,7 +28,7 @@ impl Lib {
 
         util::error_guard(
             || {
-                let result = unsafe { external::dlopen(path_to_lib_c_str, RTLD_LAZY) };
+                let result = external::dlopen(path_to_lib_c_str, RTLD_LAZY);
 
                 if result.is_null() {
                     None

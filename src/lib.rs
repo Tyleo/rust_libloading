@@ -42,15 +42,21 @@
 //! # Ok(())
 //! # }
 //! ```
+//! ### Creating a library which can be loaded
+//! Loading a library requires that the names and the types of the symbols that will be loaded be available. While this is possible for arbitrary symbols it may be difficult because they may have mangled names.
 //!
 //! ### Choosing your guarantees
-//! A common problem when loading a shared library at runtime is that a symbol may be accessed after its library has been unloaded. [sharedlib](index.html) attempts to prevent this by allowing the lifetime of the library to be tracked. Each of the different libraries, [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), or [LibUnsafe](struct.LibUnsafe.html), provides a different tracking mechanism. Below is a small overview. For more information, see the struct level documentation.
+//! A common problem when loading a shared library at runtime is that a symbol may be accessed after its library has been unloaded. [sharedlib](index.html) attempts to prevent this by allowing the lifetime of the library to be tracked. Each of the different libraries, [LibUnsafe](struct.LibUnsafe.html), [Lib](struct.Lib.html), [LibTracked](struct.LibTracked.html), [LibArc](type.LibArc.html), or [LibRc](type.LibRc.html), provides a different tracking mechanism. Below is a small overview. For more information, see the struct level documentation.
 //!
 //! * [LibUnsafe](struct.LibUnsafe.html) does not provide any tracking at all. This requires no overhead but responsibility falls on the client to be sure that the library is still alive when its symbols are used.
 //!
 //! * [Lib](struct.Lib.html) attaches its own lifetime to each symbol it returns. This requires no overhead but it can be difficult to store the returned symbol in a `struct` because the `struct` must have a trackable lifetime which outlives the [Lib](struct.Lib.html). In other words, a struct containing a symbol must parameterize around some lifetime `a`, where `a` is less than or equal to the lifetime of the library.
 //!
 //! * [LibTracked](struct.LibTracked.html) returns symbols with ref-counts to the library. This requires overhead but it allows the returned symbol to be stored easily. Additionally, this `struct` is generic and can be used with `Rc`, `Arc`, or a user provided ref-count type.
+//!
+//! * [LibArc](type.LibArc.html) is a [LibTracked](struct.LibTracked.html) which uses atomic ref-counting. This type is provided for convienience.
+//!
+//! * [LibRc](type.LibRc.html) is a [LibTracked](struct.LibTracked.html) which uses non-atomic ref-counting. This type is provided for convienience.
 //!
 //! # Pitfalls
 //! While [sharedlib](index.html) attempts to prevent undefined behavior, loading shared libraries is inherently unsafe. Below are some tips which you may find helpful so that your code is not exposed to undefined behavior.
