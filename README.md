@@ -19,7 +19,7 @@ sharedlib is a crate for loading shared libraries at runtime. This is a useful p
 # Quickstart
 To load a library you can use any of the `Lib`, `LibTracked`, or `LibUnsafe` `structs`. Each of these `struct`s provides different guarantees. For more information about the guarantees they provide see the [choosing your guarantees][choosing_your_guarantees] section in the docs. We use `Lib` for the examples below:
 
-[choosing_your_guarantees]: https://tyleo.github.io/sharedlib/target/doc/sharedlib/index.html#choosing-your-guarantees
+[choosing_your_guarantees]: https://tyleo.github.io/sharedlib/index.html#choosing-your-guarantees
 
 ### Calling a function in another library
 ```rust
