@@ -74,7 +74,7 @@ impl Lib {
     }
 }
 
-unsafe impl Send for Lib{}
+unsafe impl Send for Lib { }
 
 impl Drop for Lib {
     fn drop(&mut self) {
