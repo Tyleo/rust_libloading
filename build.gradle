@@ -1,0 +1,5 @@
+task cargoTest(dependsOn: "test:build", type: Exec) {
+    commandLine "cargo", "test"
+}
+
+task test(dependsOn: "cargoTest")

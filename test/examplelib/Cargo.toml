@@ -1,0 +1,9 @@
+[lib]
+crate-type = ["dylib"]
+
+[package]
+authors = ["Tyler Wolf Leonhardt <tyler.wolf.leonhardt@gmail.com>"]
+license = "MIT"
+name = "examplelib"
+publish = false
+version = "0.1.0"

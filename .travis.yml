@@ -1,4 +1,6 @@
 language: rust
+script:
+  - TERM=dumb ./gradlew test
 rust:
   - 1.6.0
   - stable

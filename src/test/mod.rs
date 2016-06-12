@@ -1,3 +1,7 @@
+pub mod examplelib;
+
+pub mod shared;
+
 #[cfg(unix)]
 pub mod unix;
 

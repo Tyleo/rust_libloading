@@ -1,0 +1,10 @@
+FileTree rsFiles = fileTree(dir: "src")
+rsFiles.include "**/*.rs"
+
+task cargoBuild(type: Exec) {
+    commandLine "cargo", "build"
+    inputs.file(rsFiles)
+    outputs.file("target/debug/examplelib.dll")
+}
+
+task build(dependsOn: "cargoBuild")
