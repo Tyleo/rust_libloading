@@ -9,6 +9,23 @@ authors = ["Simonas Kazlauskas <git@kazlauskas.me>", "Tyler Wolf Leonhardt <tyle
 build = "build.rs"
 description = "A cross-platform shared library loader."
 documentation = "https://tyleo.github.io/sharedlib/"
+exclude = [
+    ".build",
+    ".git",
+    ".gitignore",
+    ".gradle",
+    ".travis.yml",
+    "appveyor.yml",
+    "build.gradle",
+    "cargo.lock",
+    "gradle",
+    "gradlew",
+    "gradlew.bat",
+    "README.md",
+    "settings.gradle",
+    "target",
+    "test"
+]
 keywords = [
     "dll",
     "dylib",

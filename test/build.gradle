@@ -1,0 +1,18 @@
+
+String copyLibName
+def os = System.getProperty("os.name").toLowerCase()
+if (os.contains("windows")) {
+    copyLibName = "examplelib.dll"
+} else if (os.contains("mac os")) {
+    copyLibName = "libexamplelib.dylib"
+} else {
+    copyLibName = "libexamplelib.so"
+}
+
+
+task copyExamplelibDll(dependsOn: "examplelib:build", type: Copy) {
+    from "examplelib/target/debug/$copyLibName"
+    into ".build"
+}
+
+task build(dependsOn: "copyExamplelibDll")
