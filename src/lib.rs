@@ -9,11 +9,11 @@
 //!
 //! ### Calling a function in another library
 //! ``` no_run
+//! # use sharedlib::error::*;
 //! # use sharedlib::Func;
 //! # use sharedlib::Lib;
-//! # use sharedlib::SharedlibResult as R;
 //! # use sharedlib::Symbol;
-//! # fn test() -> R<()> {
+//! # fn test() -> Result<()> {
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -28,10 +28,10 @@
 //! ### Accessing data in another library
 //! ``` no_run
 //! # use sharedlib::Data;
+//! # use sharedlib::error::*;
 //! # use sharedlib::Lib;
-//! # use sharedlib::SharedlibResult as R;
 //! # use sharedlib::Symbol;
-//! # fn test() -> R<()> {
+//! # fn test() -> Result<()> {
 //! unsafe {
 //!     let path_to_lib = "examplelib.dll";
 //!     let lib = try!(Lib::new(path_to_lib));
@@ -63,11 +63,11 @@
 //! The [get](trait.Symbol.html#method.get) method on [Symbol](trait.Symbol.html) returns a transmuted pointer to something in a loaded library. While [sharedlib](index.html) tries to make sure that this pointer cannot outlive the library it is from, full protection is impossible. In particular: if a loaded `struct` contains pointers to things in the loaded library, and the loaded `struct` implements `Clone`, clients can clone the `struct` and make it to live longer than the library it is from. If this happens the pointers in the `struct` dangle. The example below demonstrate:
 //!
 //! ``` no_run
+//! # use sharedlib::error::*;
 //! # use sharedlib::Func;
 //! # use sharedlib::Lib;
-//! # use sharedlib::SharedlibResult as R;
 //! # use sharedlib::Symbol;
-//! # fn test() -> R<()> {
+//! # fn test() -> Result<()> {
 //! unsafe {
 //!     let some_func = {
 //!         let lib = try!(Lib::new("examplelib.dll"));
@@ -87,10 +87,10 @@
 //!
 //! ``` no_run
 //! # use sharedlib::Data;
+//! # use sharedlib::error::*;
 //! # use sharedlib::Lib;
-//! # use sharedlib::SharedlibResult as R;
 //! # use sharedlib::Symbol;
-//! # fn test() -> R<()> {
+//! # fn test() -> Result<()> {
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
 //!     let some_func_symbol: Data<extern "C" fn()> = try!(lib.find_data("some_func"));
@@ -107,10 +107,10 @@
 //!
 //! ``` no_run
 //! # use sharedlib::Data;
+//! # use sharedlib::error::*;
 //! # use sharedlib::Lib;
-//! # use sharedlib::SharedlibResult as R;
 //! # use sharedlib::Symbol;
-//! # fn test() -> R<()> {
+//! # fn test() -> Result<()> {
 //! unsafe {
 //!     let lib = try!(Lib::new("examplelib.dll"));
 //!     // Get a pointer to the block of memory at "some_func", this is the function itself.
@@ -143,7 +143,7 @@
 //! While rust provides linking against shared libraries, it does not provide the ability to load them at runtime. If you only want to use shared libraries that you know about before runtime, you may find not find this crate very useful. On the other hand, if you wish to load something at runtime, like a plugin, you are in the right place.
 
 #[macro_use]
-extern crate define_error;
+extern crate error_chain;
 
 #[macro_use]
 extern crate lazy_static;
@@ -168,10 +168,6 @@ mod symbol;
 mod test;
 
 mod util;
-
-pub use error::SharedlibError;
-
-pub use error::SharedlibResult;
 
 pub use lib_impl::Lib;
 

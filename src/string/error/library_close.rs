@@ -3,5 +3,5 @@ pub fn description() -> &'static str {
 }
 
 pub fn display_1() -> &'static str {
-    "A shared library failed to close. Cause: \n"
+    "A shared library failed to close."
 }

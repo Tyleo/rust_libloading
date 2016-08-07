@@ -1,10 +1,6 @@
-use error::LibraryClose;
-use error::LibraryFindSymbol;
-use error::LibraryOpen;
+use error::*;
 use kernel32;
 use os::windows::OkOrGetLastError;
-use SharedlibError as E;
-use SharedlibResult as R;
 use std::mem;
 use std::os::windows::ffi::OsStrExt;
 use std::path::Path;
@@ -18,7 +14,7 @@ pub struct Lib {
 }
 
 impl Lib {
-    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Lib>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Lib>
         where TPath: AsRef<Path> {
         let path_to_lib_vec: Vec<_> =
             path_to_lib
@@ -41,15 +37,19 @@ impl Lib {
                     };
                 lib_option.ok_or_get_last_error("LoadLibraryW")
             }
-        ).map_err(
-            |err| {
-                let err = LibraryOpen::new(Box::new(err), path_to_lib.as_ref().to_path_buf());
-                E::from(err)
-            }
+        ).chain_err(
+            || ErrorKind::LibraryOpen(path_to_lib.as_ref().to_path_buf())
         )
+
+        // .map_err(
+        //     |err| {
+        //         let err = LibraryOpen::new(Box::new(err), path_to_lib.as_ref().to_path_buf());
+        //         E::from(err)
+        //     }
+        // )
     }
 
-    pub unsafe fn find<T, TStr>(&self, symbol_str: TStr) -> R<*const T>
+    pub unsafe fn find<T, TStr>(&self, symbol_str: TStr) -> Result<*const T>
         where TStr: AsRef<str> {
         let symbol = symbol_str.as_ref();
         let symbol = symbol.as_ptr();
@@ -64,11 +64,8 @@ impl Lib {
                     Some(mem::transmute(symbol))
                 }.ok_or_get_last_error("GetProcAddress")
             }
-        ).map_err(
-            |err| {
-                let err = LibraryFindSymbol::new(Box::new(err), symbol_str.as_ref().to_string());
-                E::from(err)
-            }
+        ).chain_err(
+            || ErrorKind::LibraryFindSymbol(symbol_str.as_ref().to_string())
         )
     }
 }
@@ -85,11 +82,8 @@ impl Drop for Lib {
                     Some(())
                 }.ok_or_get_last_error("FreeLibrary")
             }
-        ).map_err(
-            |err| {
-                let err = LibraryClose::new(Box::new(err));
-                E::from(err)
-            }
+        ).chain_err(
+            || ErrorKind::LibraryClose
         ).unwrap()
     }
 }

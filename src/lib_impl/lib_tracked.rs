@@ -1,7 +1,7 @@
 use DataTracked;
+use error::*;
 use FuncTracked;
 use LibUnsafe;
-use SharedlibResult as R;
 use std::path::Path;
 
 /// A shared library which which allows a user-provided ref-counting implementation to track its [Symbols](trait.Symbol.html).
@@ -24,17 +24,17 @@ impl <TLib> LibTracked<TLib>
     ///
     /// # Examples
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibTracked;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use std::rc::Rc;
     /// type LibRc = LibTracked<Rc<LibUnsafe>>;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// let lib = try!(unsafe { LibRc::new("examplelib.dll") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Self>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Self>
         where TPath: AsRef<Path> {
         let lib_unsafe = try!(LibUnsafe::new(path_to_lib));
         let inner = TLib::from(lib_unsafe);
@@ -59,14 +59,14 @@ impl <TLib> LibTracked<TLib>
     ///
     /// ``` no_run
     /// # use sharedlib::DataTracked;
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibTracked;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
     /// # use std::rc::Rc;
     /// type DataRc<T> = DataTracked<T, Rc<LibUnsafe>>;
     /// # type LibRc = LibTracked<Rc<LibUnsafe>>;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibRc::new("examplelib.dll") });
     /// let some_usize: DataRc<usize> = try!(unsafe { lib.find_data("some_usize") });
     /// # Ok(())
@@ -77,20 +77,20 @@ impl <TLib> LibTracked<TLib>
     ///
     /// ``` no_run
     /// # use sharedlib::DataTracked;
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibTracked;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
     /// # use std::rc::Rc;
     /// type DataRc<T> = DataTracked<T, Rc<LibUnsafe>>;
     /// # type LibRc = LibTracked<Rc<LibUnsafe>>;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibRc::new("examplelib.dll") });
     /// let some_usize: DataRc<usize> = try!(unsafe { lib.find_data("some_usize\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_data<T, TStr>(&self, symbol: TStr) -> R<DataTracked<T, TLib>>
+    pub unsafe fn find_data<T, TStr>(&self, symbol: TStr) -> Result<DataTracked<T, TLib>>
         where TStr: AsRef<str> {
         let lib = self.inner.as_ref();
         let symbol_ptr = try!(lib.find_data::<T, TStr>(symbol));
@@ -111,15 +111,15 @@ impl <TLib> LibTracked<TLib>
     /// Finding a function convieniently:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::FuncTracked;
     /// # use sharedlib::LibTracked;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
     /// # use std::rc::Rc;
     /// type FuncRc<T> = FuncTracked<T, Rc<LibUnsafe>>;
     /// # type LibRc = LibTracked<Rc<LibUnsafe>>;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibRc::new("examplelib.dll") });
     /// let some_func: FuncRc<fn()> = try!(unsafe { lib.find_func("some_func") });
     /// # Ok(())
@@ -129,21 +129,21 @@ impl <TLib> LibTracked<TLib>
     /// Finding a function with maximum performance:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::FuncTracked;
     /// # use sharedlib::LibTracked;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
     /// # use std::rc::Rc;
     /// type FuncRc<T> = FuncTracked<T, Rc<LibUnsafe>>;
     /// # type LibRc = LibTracked<Rc<LibUnsafe>>;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibRc::new("examplelib.dll") });
     /// let some_func: FuncRc<fn()> = try!(unsafe { lib.find_func("some_func\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_func<T, TStr>(&self, symbol: TStr) -> R<FuncTracked<T, TLib>>
+    pub unsafe fn find_func<T, TStr>(&self, symbol: TStr) -> Result<FuncTracked<T, TLib>>
         where T: Copy,
               TStr: AsRef<str> {
         let lib = self.inner.as_ref();

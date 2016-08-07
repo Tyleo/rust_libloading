@@ -1,11 +1,7 @@
-use error::LibraryClose;
-use error::LibraryFindSymbol;
-use error::LibraryOpen;
+use error::*;
 use os::unix::external;
 use os::unix::OkOrDlerror;
 use os::unix::RTLD_LAZY;
-use SharedlibError as E;
-use SharedlibResult as R;
 use util;
 use std::mem;
 use std::path::Path;
@@ -18,7 +14,7 @@ pub struct Lib {
 }
 
 impl Lib {
-    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Lib>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Lib>
         where TPath: AsRef<Path> {
         let path_to_lib_str =
             path_to_lib
@@ -41,15 +37,12 @@ impl Lib {
                 }
             }
         ).ok_or_dlerror("dlopen")
-        .map_err(
-            |err| {
-                let err = LibraryOpen::new(Box::new(err), path_to_lib.as_ref().to_path_buf());
-                E::from(err)
-            }
+        .chain_err(
+            || ErrorKind::LibraryOpen(path_to_lib.as_ref().to_path_buf())
         )
     }
 
-    pub unsafe fn find<T, TStr>(&self, symbol_str: TStr) -> R<*const T>
+    pub unsafe fn find<T, TStr>(&self, symbol_str: TStr) -> Result<*const T>
         where TStr: AsRef<str> {
         let symbol = symbol_str.as_ref();
         let symbol = symbol.as_ptr();
@@ -65,11 +58,8 @@ impl Lib {
                 }
             }
         ).ok_or_dlerror("dlsym")
-        .map_err(
-            |err| {
-                let err = LibraryFindSymbol::new(Box::new(err), symbol_str.as_ref().to_string());
-                E::from(err)
-            }
+        .chain_err(
+            || ErrorKind::LibraryFindSymbol(symbol_str.as_ref().to_string())
         )
     }
 }
@@ -87,11 +77,8 @@ impl Drop for Lib {
                 }
             }
         ).ok_or_dlerror("dlclose")
-        .map_err(
-            |err| {
-                let err = LibraryClose::new(Box::new(err));
-                E::from(err)
-            }
+        .chain_err(
+            || ErrorKind::LibraryClose
         ).unwrap();
     }
 }

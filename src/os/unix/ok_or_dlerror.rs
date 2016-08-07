@@ -1,34 +1,25 @@
-use error::OsError;
-use error::OsErrorFailure;
+use error::*;
 use os::unix::external;
-use SharedlibError as E;
-use SharedlibResult as R;
 use std::ffi::CStr;
 
 pub trait OkOrDlerror<T> {
-    fn ok_or_dlerror<TStr>(self, function: TStr) -> R<T>
+    fn ok_or_dlerror<TStr>(self, function: TStr) -> Result<T>
         where TStr: AsRef<str>;
 }
 
 impl <T> OkOrDlerror<T> for Option<T> {
-    fn ok_or_dlerror<TStr>(self, function: TStr) -> R<T>
+    fn ok_or_dlerror<TStr>(self, function: TStr) -> Result<T>
         where TStr: AsRef<str> {
         match self {
             Some(some) => Ok(some),
             None => {
                 let error = unsafe { external::dlerror() };
                 if error.is_null() {
-                    let err = OsErrorFailure::new(function.as_ref().to_string());
-                    Err(E::from(err))
+                    Err(ErrorKind::OsErrorFailure(function.as_ref().to_string()).into())
                 } else {
                     let message = unsafe { CStr::from_ptr(error) };
                     let message_string = message.to_string_lossy().to_string();
-                    let err =
-                        OsError::new(
-                            message_string,
-                            function.as_ref().to_string(),
-                        );
-                    Err(E::from(err))
+                    Err(ErrorKind::OsError(message_string.to_string(), function.as_ref().to_string()).into())
                 }
             },
         }

@@ -7,5 +7,5 @@ pub fn display_1() -> &'static str {
 }
 
 pub fn display_2() -> &'static str {
-    "', from a shared library failed. Cause: \n"
+    "', from a shared library failed."
 }

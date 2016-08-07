@@ -1,7 +1,7 @@
 use DataUnsafe;
+use error::*;
 use FuncUnsafe;
 use os::uses::Lib as InnerLib;
-use SharedlibResult as R;
 use std::mem;
 use std::path::Path;
 use util;
@@ -25,14 +25,14 @@ impl LibUnsafe {
     ///
     /// # Examples
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// let lib = try!(unsafe { LibUnsafe::new("examplelib.dll") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Self>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Self>
         where TPath: AsRef<Path> {
         let inner = try!(InnerLib::new(path_to_lib));
         let result =
@@ -56,10 +56,10 @@ impl LibUnsafe {
     ///
     /// ``` no_run
     /// # use sharedlib::DataUnsafe;
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibUnsafe::new("examplelib.dll") });
     /// let some_usize: DataUnsafe<usize> = try!(unsafe { lib.find_data("some_usize") });
     /// # Ok(())
@@ -70,16 +70,16 @@ impl LibUnsafe {
     ///
     /// ``` no_run
     /// # use sharedlib::DataUnsafe;
+    /// # use sharedlib::error::*;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibUnsafe::new("examplelib.dll") });
     /// let some_usize: DataUnsafe<usize> = try!(unsafe { lib.find_data("some_usize\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_data<T, TStr>(&self, symbol: TStr) -> R<DataUnsafe<T>>
+    pub unsafe fn find_data<T, TStr>(&self, symbol: TStr) -> Result<DataUnsafe<T>>
         where TStr: AsRef<str> {
         match util::null_terminate(&symbol) {
             Some(symbol) => self.inner.find(symbol),
@@ -100,11 +100,11 @@ impl LibUnsafe {
     /// Finding a function convieniently:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::FuncUnsafe;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibUnsafe::new("examplelib.dll") });
     /// let some_func: FuncUnsafe<fn()> = try!(unsafe { lib.find_func("some_func") });
     /// # Ok(())
@@ -114,17 +114,17 @@ impl LibUnsafe {
     /// Finding a function with maximum performance:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::FuncUnsafe;
     /// # use sharedlib::LibUnsafe;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { LibUnsafe::new("examplelib.dll") });
     /// let some_func: FuncUnsafe<fn()> = try!(unsafe { lib.find_func("some_func\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_func<T, TStr>(&self, symbol: TStr) -> R<FuncUnsafe<T>>
+    pub unsafe fn find_func<T, TStr>(&self, symbol: TStr) -> Result<FuncUnsafe<T>>
         where T: Copy,
               TStr: AsRef<str> {
         let func =

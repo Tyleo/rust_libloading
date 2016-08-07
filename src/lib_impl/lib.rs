@@ -1,7 +1,7 @@
 use Data;
+use error::*;
 use Func;
 use LibUnsafe;
-use SharedlibResult as R;
 use std::mem;
 use std::path::Path;
 
@@ -24,14 +24,14 @@ impl Lib {
     ///
     /// # Examples
     /// ``` no_run
+    /// # use sharedlib::error::Result;
     /// # use sharedlib::Lib;
-    /// # use sharedlib::SharedlibResult as R;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// let lib = try!(unsafe { Lib::new("examplelib.dll") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn new<TPath>(path_to_lib: TPath) -> R<Self>
+    pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Self>
         where TPath: AsRef<Path> {
         let inner = try!(LibUnsafe::new(path_to_lib));
         let result =
@@ -55,10 +55,10 @@ impl Lib {
     ///
     /// ``` no_run
     /// # use sharedlib::Data;
+    /// # use sharedlib::error::Result;
     /// # use sharedlib::Lib;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { Lib::new("examplelib.dll") });
     /// let some_usize: Data<usize> = try!(unsafe { lib.find_data("some_usize") });
     /// # Ok(())
@@ -69,16 +69,16 @@ impl Lib {
     ///
     /// ``` no_run
     /// # use sharedlib::Data;
+    /// # use sharedlib::error::Result;
     /// # use sharedlib::Lib;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { Lib::new("examplelib.dll") });
     /// let some_usize: Data<usize> = try!(unsafe { lib.find_data("some_usize\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_data<'a, T, TStr>(&'a self, symbol: TStr) -> R<Data<'a, T>>
+    pub unsafe fn find_data<'a, T, TStr>(&'a self, symbol: TStr) -> Result<Data<'a, T>>
         where TStr: AsRef<str> {
         let symbol_ptr = try!(self.inner.find_data::<T, TStr>(symbol));
         let symbol_ref = mem::transmute(symbol_ptr);
@@ -99,11 +99,11 @@ impl Lib {
     /// Finding a function convieniently:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::Func;
     /// # use sharedlib::Lib;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { Lib::new("examplelib.dll") });
     /// let some_func: Func<fn()> = try!(unsafe { lib.find_func("some_func") });
     /// # Ok(())
@@ -113,17 +113,17 @@ impl Lib {
     /// Finding a function with maximum performance:
     ///
     /// ``` no_run
+    /// # use sharedlib::error::*;
     /// # use sharedlib::Func;
     /// # use sharedlib::Lib;
-    /// # use sharedlib::SharedlibResult as R;
     /// # use sharedlib::Symbol;
-    /// # fn test() -> R<()> {
+    /// # fn test() -> Result<()> {
     /// # let lib = try!(unsafe { Lib::new("examplelib.dll") });
     /// let some_func: Func<fn()> = try!(unsafe { lib.find_func("some_func\0") });
     /// # Ok(())
     /// # }
     /// ```
-    pub unsafe fn find_func<'a, T, TStr>(&'a self, symbol: TStr) -> R<Func<'a, T>>
+    pub unsafe fn find_func<'a, T, TStr>(&'a self, symbol: TStr) -> Result<Func<'a, T>>
         where T: Copy,
               TStr: AsRef<str> {
         let func = try!(self.inner.find_func::<T, TStr>(symbol));
