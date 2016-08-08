@@ -1,0 +1,1 @@
+initSidebarItems({"type":[["FuncUnsafe","A pointer to a shared function which provides no protection against outliving its library."]]});

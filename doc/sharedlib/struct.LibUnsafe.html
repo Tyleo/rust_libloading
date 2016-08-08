@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `LibUnsafe` struct in crate `sharedlib`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, LibUnsafe">
+
+    <title>sharedlib::LibUnsafe - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>sharedlib</a></p><script>window.sidebarCurrent = {name: 'LibUnsafe', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>sharedlib</a>::<wbr><a class='struct' href=''>LibUnsafe</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-393' class='srclink' href='../src/sharedlib/src/lib_impl/lib_unsafe.rs.html#12-14' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct LibUnsafe {
+    // some fields omitted
+}</pre><div class='docblock'><p>A shared library which does not track its <a href="trait.Symbol.html">Symbols</a>.
+The inner library may be dropped at any time, even if it has loose symbols.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../sharedlib/struct.LibUnsafe.html' title='sharedlib::LibUnsafe'>LibUnsafe</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-401' class='srclink' href='../src/sharedlib/src/lib_impl/lib_unsafe.rs.html#16-139' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.new' class='method'><code>unsafe fn <a href='#method.new' class='fnname'>new</a>&lt;TPath&gt;(path_to_lib: TPath) -&gt; <a class='type' href='../sharedlib/error/type.Result.html' title='sharedlib::error::Result'>Result</a>&lt;Self&gt; <span class='where'>where TPath: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>&gt;</span></code></h4>
+<div class='docblock'><p>Opens a shared library at the specified path.
+The path is used in conjunction with platform specific shared library search paths to determine which shared library will be opened. Search paths vary across environments and are not discussed in this documentation. The behavior of this function when it is called on the same path multiple times is platform specific. If you wish to obtain multiple copies of a library within the same code base in a platform generic way, you should load the symbol once in a <a href="struct.LibTracked.html">LibTracked</a> like <a href="struct.LibArc.html">LibArc</a>, or <a href="struct.LibRc.html">LibRc</a>, and pass around copies of the <a href="struct.LibTracked.html">LibTracked</a>.</p>
+
+<h1 id='errors' class='section-header'><a href='#errors'>Errors</a></h1>
+<p>A <code>LibraryOpen</code> error will be returned as a <a href="enum.SharedlibError.html">SharedlibError</a> variant if there is a problem opening the shared library. For instance, this may happen if the shared library is not at the path specified.</p>
+
+<h1 id='safety' class='section-header'><a href='#safety'>Safety</a></h1>
+<p>Opening a shared library may execute code within the shared library. Since it is impossible to guarantee that the code witin the shared library is safe, the call to new is unsafe.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>LibUnsafe</span>::<span class='ident'>new</span>(<span class='string'>&quot;examplelib.dll&quot;</span>) });</pre>
+</div><h4 id='method.find_data' class='method'><code>unsafe fn <a href='#method.find_data' class='fnname'>find_data</a>&lt;T, TStr&gt;(&amp;self, symbol: TStr) -&gt; <a class='type' href='../sharedlib/error/type.Result.html' title='sharedlib::error::Result'>Result</a>&lt;<a class='type' href='../sharedlib/type.DataUnsafe.html' title='sharedlib::DataUnsafe'>DataUnsafe</a>&lt;T&gt;&gt; <span class='where'>where TStr: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</span></code></h4>
+<div class='docblock'><p>Finds and returns a data symbol within the shared library.
+By passing in a null terminated string, an extra allocation may be avoided.</p>
+
+<h1 id='errors-1' class='section-header'><a href='#errors-1'>Errors</a></h1>
+<p>A <code>LibraryFindSymbol</code> error will be returned as a <a href="enum.SharedlibError.html">SharedlibError</a> variant if there is a problem finding the symbol. For instance, this may happen if the shared library does not contain the requested symbol.</p>
+
+<h1 id='safety-1' class='section-header'><a href='#safety-1'>Safety</a></h1>
+<p>This function is not type safe so there is no guarntee that <code>T</code> is really the type of the symbol. Using a symbol as a <code>T</code> when the symbol is not really of type <code>T</code> causes undefined behavior.</p>
+
+<h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
+<p>Finding data convieniently:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>some_usize</span>: <span class='ident'>DataUnsafe</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>lib</span>.<span class='ident'>find_data</span>(<span class='string'>&quot;some_usize&quot;</span>) });</pre>
+
+<p>Finding data with maximum performance:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>some_usize</span>: <span class='ident'>DataUnsafe</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>lib</span>.<span class='ident'>find_data</span>(<span class='string'>&quot;some_usize\0&quot;</span>) });</pre>
+</div><h4 id='method.find_func' class='method'><code>unsafe fn <a href='#method.find_func' class='fnname'>find_func</a>&lt;T, TStr&gt;(&amp;self, symbol: TStr) -&gt; <a class='type' href='../sharedlib/error/type.Result.html' title='sharedlib::error::Result'>Result</a>&lt;<a class='type' href='../sharedlib/type.FuncUnsafe.html' title='sharedlib::FuncUnsafe'>FuncUnsafe</a>&lt;T&gt;&gt; <span class='where'>where T: <a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a>, TStr: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</span></code></h4>
+<div class='docblock'><p>Finds and returns a function symbol within the shared library.
+By passing in a null terminated string, an extra allocation may be avoided.</p>
+
+<h1 id='errors-2' class='section-header'><a href='#errors-2'>Errors</a></h1>
+<p>A <code>LibraryFindSymbol</code> error will be returned as a <a href="enum.SharedlibError.html">SharedlibError</a> variant if there is a problem finding the symbol. For instance, this may happen if the shared library does not contain the requested symbol.</p>
+
+<h1 id='safety-2' class='section-header'><a href='#safety-2'>Safety</a></h1>
+<p>This function is not type safe so there is no guarntee that <code>T</code> is really the type of the symbol. Using a symbol as a <code>T</code> when the symbol is not really of type <code>T</code> causes undefined behavior.</p>
+
+<h1 id='examples-2' class='section-header'><a href='#examples-2'>Examples</a></h1>
+<p>Finding a function convieniently:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>some_func</span>: <span class='ident'>FuncUnsafe</span><span class='op'>&lt;</span><span class='kw'>fn</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>lib</span>.<span class='ident'>find_func</span>(<span class='string'>&quot;some_func&quot;</span>) });</pre>
+
+<p>Finding a function with maximum performance:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>some_func</span>: <span class='ident'>FuncUnsafe</span><span class='op'>&lt;</span><span class='kw'>fn</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='kw'>unsafe</span> { <span class='ident'>lib</span>.<span class='ident'>find_func</span>(<span class='string'>&quot;some_func\0&quot;</span>) });</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 id='derived_implementations'>Derived Implementations </h3><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../sharedlib/struct.LibUnsafe.html' title='sharedlib::LibUnsafe'>LibUnsafe</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-395' class='srclink' href='../src/sharedlib/src/lib_impl/lib_unsafe.rs.html#11' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "sharedlib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Symbol","A symbol from a shared library."]]});

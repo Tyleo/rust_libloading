@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ID3D11FunctionLinkingGraphVtbl` struct in crate `winapi`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ID3D11FunctionLinkingGraphVtbl">
+
+    <title>winapi::d3d11shader::ID3D11FunctionLinkingGraphVtbl - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>winapi</a>::<wbr><a href='index.html'>d3d11shader</a></p><script>window.sidebarCurrent = {name: 'ID3D11FunctionLinkingGraphVtbl', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>winapi</a>::<wbr><a href='index.html'>d3d11shader</a>::<wbr><a class='struct' href=''>ID3D11FunctionLinkingGraphVtbl</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-31368' class='srclink' href='../../src/winapi/macros.rs.html#138-144' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ID3D11FunctionLinkingGraphVtbl {
+    pub parent: <a class='struct' href='../../winapi/unknwnbase/struct.IUnknownVtbl.html' title='winapi::unknwnbase::IUnknownVtbl'>IUnknownVtbl</a>,
+    pub CreateModuleInstance: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, ppModuleInstance: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11ModuleInstance.html' title='winapi::d3d11shader::ID3D11ModuleInstance'>ID3D11ModuleInstance</a>, ppErrorBuffer: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='type' href='../../winapi/d3dcommon/type.ID3DBlob.html' title='winapi::d3dcommon::ID3DBlob'>ID3DBlob</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub SetInputSignature: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, pInputParameters: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const </a><a class='struct' href='../../winapi/d3d11shader/struct.D3D11_PARAMETER_DESC.html' title='winapi::d3d11shader::D3D11_PARAMETER_DESC'>D3D11_PARAMETER_DESC</a>, cInputParameters: <a class='type' href='../../winapi/minwindef/type.UINT.html' title='winapi::minwindef::UINT'>UINT</a>, ppInputNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub SetOutputSignature: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, pOutputParameters: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const </a><a class='struct' href='../../winapi/d3d11shader/struct.D3D11_PARAMETER_DESC.html' title='winapi::d3d11shader::D3D11_PARAMETER_DESC'>D3D11_PARAMETER_DESC</a>, cOutputParameters: <a class='type' href='../../winapi/minwindef/type.UINT.html' title='winapi::minwindef::UINT'>UINT</a>, ppOutputNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub CallFunction: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, pModuleInstanceNamespace: <a class='type' href='../../winapi/winnt/type.LPCSTR.html' title='winapi::winnt::LPCSTR'>LPCSTR</a>, pModuleWithFunctionPrototype: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11Module.html' title='winapi::d3d11shader::ID3D11Module'>ID3D11Module</a>, pFunctionName: <a class='type' href='../../winapi/winnt/type.LPCSTR.html' title='winapi::winnt::LPCSTR'>LPCSTR</a>, ppCallNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub PassValue: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, pSrcNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>, SrcParameterIndex: <a class='type' href='../../winapi/minwindef/type.INT.html' title='winapi::minwindef::INT'>INT</a>, pDstNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>, DstParameterIndex: <a class='type' href='../../winapi/minwindef/type.INT.html' title='winapi::minwindef::INT'>INT</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub PassValueWithSwizzle: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, pSrcNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>, SrcParameterIndex: <a class='type' href='../../winapi/minwindef/type.INT.html' title='winapi::minwindef::INT'>INT</a>, pSrcSwizzle: <a class='type' href='../../winapi/winnt/type.LPCSTR.html' title='winapi::winnt::LPCSTR'>LPCSTR</a>, pDstNode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11LinkingNode.html' title='winapi::d3d11shader::ID3D11LinkingNode'>ID3D11LinkingNode</a>, DstParameterIndex: <a class='type' href='../../winapi/minwindef/type.INT.html' title='winapi::minwindef::INT'>INT</a>, pDstSwizzle: <a class='type' href='../../winapi/winnt/type.LPCSTR.html' title='winapi::winnt::LPCSTR'>LPCSTR</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub GetLastError: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, ppErrorBuffer: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='type' href='../../winapi/d3dcommon/type.ID3DBlob.html' title='winapi::d3dcommon::ID3DBlob'>ID3DBlob</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+    pub GenerateHlsl: unsafe extern &quot;system&quot; fn(This: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='struct' href='../../winapi/d3d11shader/struct.ID3D11FunctionLinkingGraph.html' title='winapi::d3d11shader::ID3D11FunctionLinkingGraph'>ID3D11FunctionLinkingGraph</a>, uFlags: <a class='type' href='../../winapi/minwindef/type.UINT.html' title='winapi::minwindef::UINT'>UINT</a>, ppBuffer: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*mut </a><a class='type' href='../../winapi/d3dcommon/type.ID3DBlob.html' title='winapi::d3dcommon::ID3DBlob'>ID3DBlob</a>) -&gt; <a class='type' href='../../winapi/winerror/type.HRESULT.html' title='winapi::winerror::HRESULT'>HRESULT</a>,
+}</pre><h2 class='fields'>Fields</h2>
+<table><tr class='stab '>
+                             <td id='structfield.parent'><code>parent</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.CreateModuleInstance'><code>CreateModuleInstance</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.SetInputSignature'><code>SetInputSignature</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.SetOutputSignature'><code>SetOutputSignature</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.CallFunction'><code>CallFunction</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.PassValue'><code>PassValue</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.PassValueWithSwizzle'><code>PassValueWithSwizzle</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.GetLastError'><code>GetLastError</code></td><td></td></tr><tr class='stab '>
+                             <td id='structfield.GenerateHlsl'><code>GenerateHlsl</code></td><td></td></tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "winapi";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

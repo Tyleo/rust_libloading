@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Lib","A shared library which uses bound lifetimes to track its Symbols. The inner library cannot be dropped if at least one loose symbol exists."]]});

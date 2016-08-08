@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Backtrace","Representation of an owned and self-contained backtrace."],["BacktraceFrame","Captured version of a frame in a backtrace."],["BacktraceSymbol","Captured version of a symbol in a backtrace."]]});

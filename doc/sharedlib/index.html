@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `sharedlib` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, sharedlib">
+
+    <title>sharedlib - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'sharedlib', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>sharedlib</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/sharedlib/src/lib.rs.html#1-202' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>A simple cross-platform library loader.</p>
+
+<p>(<a href="https://crates.io/crates/sharedlib">crates.io</a>) (<a href="https://github.com/Tyleo/sharedlib">github</a>)</p>
+
+<p>Based on <a href="https://crates.io/crates/libloading">libloading</a> by Simonas Kazlauskas.</p>
+
+<h1 id='loading-a-library' class='section-header'><a href='#loading-a-library'>Loading a library</a></h1>
+<p>To load a library you can use any of the <a href="struct.Lib.html">Lib</a>, <a href="struct.LibTracked.html">LibTracked</a>, or <a href="struct.LibUnsafe.html">LibUnsafe</a> <code>structs</code>. Each of these <code>struct</code>s provides different guarantees. For more information about the guarantees they provide, see the <a href="index.html#choosing-your-guarantees">chosing your guarantees</a> section, below. We use <a href="struct.Lib.html">Lib</a> for the examples below.</p>
+
+<h3 id='calling-a-function-in-another-library' class='section-header'><a href='#calling-a-function-in-another-library'>Calling a function in another library</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>unsafe</span> {
+    <span class='kw'>let</span> <span class='ident'>path_to_lib</span> <span class='op'>=</span> <span class='string'>&quot;examplelib.dll&quot;</span>;
+    <span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Lib</span>::<span class='ident'>new</span>(<span class='ident'>path_to_lib</span>));
+    <span class='kw'>let</span> <span class='ident'>hello_world_symbol</span>: <span class='ident'>Func</span><span class='op'>&lt;</span><span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>lib</span>.<span class='ident'>find_func</span>(<span class='string'>&quot;hello_world&quot;</span>));
+    <span class='kw'>let</span> <span class='ident'>hello_world</span> <span class='op'>=</span> <span class='ident'>hello_world_symbol</span>.<span class='ident'>get</span>();
+    <span class='ident'>hello_world</span>();
+}</pre>
+
+<h3 id='accessing-data-in-another-library' class='section-header'><a href='#accessing-data-in-another-library'>Accessing data in another library</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>unsafe</span> {
+    <span class='kw'>let</span> <span class='ident'>path_to_lib</span> <span class='op'>=</span> <span class='string'>&quot;examplelib.dll&quot;</span>;
+    <span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Lib</span>::<span class='ident'>new</span>(<span class='ident'>path_to_lib</span>));
+    <span class='kw'>let</span> <span class='ident'>my_usize_symbol</span>: <span class='ident'>Data</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>lib</span>.<span class='ident'>find_data</span>(<span class='string'>&quot;my_usize&quot;</span>));
+    <span class='kw'>let</span> <span class='ident'>my_usize</span> <span class='op'>=</span> <span class='ident'>my_usize_symbol</span>.<span class='ident'>get</span>();
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='op'>*</span><span class='ident'>my_usize</span>, <span class='number'>0</span>);
+}</pre>
+
+<h3 id='choosing-your-guarantees' class='section-header'><a href='#choosing-your-guarantees'>Choosing your guarantees</a></h3>
+<p>A common problem when loading a shared library at runtime is that a symbol may be accessed after its library has been unloaded. <a href="index.html">sharedlib</a> attempts to prevent this by allowing the lifetime of the library to be tracked. Each of the different libraries, <a href="struct.LibUnsafe.html">LibUnsafe</a>, <a href="struct.Lib.html">Lib</a>, <a href="struct.LibTracked.html">LibTracked</a>, <a href="type.LibArc.html">LibArc</a>, or <a href="type.LibRc.html">LibRc</a>, provides a different tracking mechanism. Below is a small overview. For more information, see the struct level documentation.</p>
+
+<ul>
+<li><p><a href="struct.LibUnsafe.html">LibUnsafe</a> does not provide any tracking at all. This requires no overhead but responsibility falls on the client to be sure that the library is still alive when its symbols are used.</p></li>
+<li><p><a href="struct.Lib.html">Lib</a> attaches its own lifetime to each symbol it returns. This requires no overhead but it can be difficult to store the returned symbol in a <code>struct</code> because the <code>struct</code> must have a trackable lifetime which outlives the <a href="struct.Lib.html">Lib</a>. In other words, a struct containing a symbol must parameterize around some lifetime <code>a</code>, where <code>a</code> is less than or equal to the lifetime of the library.</p></li>
+<li><p><a href="struct.LibTracked.html">LibTracked</a> returns symbols with ref-counts to the library. This requires overhead but it allows the returned symbol to be stored easily. Additionally, this <code>struct</code> is generic and can be used with <code>Rc</code>, <code>Arc</code>, or a user provided ref-count type.</p></li>
+<li><p><a href="type.LibArc.html">LibArc</a> is a <a href="struct.LibTracked.html">LibTracked</a> which uses atomic ref-counting. This type is provided for convienience.</p></li>
+<li><p><a href="type.LibRc.html">LibRc</a> is a <a href="struct.LibTracked.html">LibTracked</a> which uses non-atomic ref-counting. This type is provided for convienience.</p></li>
+</ul>
+
+<h1 id='pitfalls' class='section-header'><a href='#pitfalls'>Pitfalls</a></h1>
+<p>While <a href="index.html">sharedlib</a> attempts to prevent undefined behavior, loading shared libraries is inherently unsafe. Below are some tips which you may find helpful so that your code is not exposed to undefined behavior.</p>
+
+<h3 id='avoid-copying-or-moving-data-returned-from-get' class='section-header'><a href='#avoid-copying-or-moving-data-returned-from-get'>Avoid copying or moving data returned from <code>get()</code></a></h3>
+<p>The <a href="trait.Symbol.html#method.get">get</a> method on <a href="trait.Symbol.html">Symbol</a> returns a transmuted pointer to something in a loaded library. While <a href="index.html">sharedlib</a> tries to make sure that this pointer cannot outlive the library it is from, full protection is impossible. In particular: if a loaded <code>struct</code> contains pointers to things in the loaded library, and the loaded <code>struct</code> implements <code>Clone</code>, clients can clone the <code>struct</code> and make it to live longer than the library it is from. If this happens the pointers in the <code>struct</code> dangle. The example below demonstrate:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>unsafe</span> {
+    <span class='kw'>let</span> <span class='ident'>some_func</span> <span class='op'>=</span> {
+        <span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Lib</span>::<span class='ident'>new</span>(<span class='string'>&quot;examplelib.dll&quot;</span>));
+        <span class='kw'>let</span> <span class='ident'>some_func_symbol</span>: <span class='ident'>Func</span><span class='op'>&lt;</span><span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>lib</span>.<span class='ident'>find_func</span>(<span class='string'>&quot;some_func&quot;</span>));
+        <span class='comment'>// All func pointers implement `Copy` so we can duplicate one.</span>
+        <span class='ident'>some_func_symbol</span>.<span class='ident'>get</span>()
+        <span class='comment'>// lib goes out of scope here.</span>
+    };
+    <span class='comment'>// Undefined behavior</span>
+    <span class='ident'>some_func</span>();
+}</pre>
+
+<h3 id='use-the-correct-method-when-getting-functions-or-data' class='section-header'><a href='#use-the-correct-method-when-getting-functions-or-data'>Use the correct method when getting functions or data</a></h3>
+<p>Each library provides two different ways to get symbols from shared libraries. One way is <code>find_func</code>, and the other is <code>find_data</code>. Two functions are provded because <code>find_data</code> needs to return a reference to a <code>T</code> rather than a <code>T</code> itself, while <code>find_func</code> just needs to return a <code>T</code> itself. Returning the wrong thing can cause some complications. For instance: suppose we only have the <code>find_data</code> method, and we want to get a function pointer with the signature <code>fn()</code>. We are inclined to call <code>lib.find_data::&lt;fn()&gt;(b&quot;some_func&quot;)</code>. This searches the memory of the loaded binary and finds the address of the first line of the function <code>some_func</code>. Next, the <em>contents</em> of the first line of <code>some_func</code> are treated as a function pointer rather than the <em>address</em> of the first line of <code>some_func</code>. When the first line of <code>some_func</code> is returned it is incorrectly cast into a function pointer. Calling it produces undefined behavior. The example below demonstrates:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>unsafe</span> {
+    <span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Lib</span>::<span class='ident'>new</span>(<span class='string'>&quot;examplelib.dll&quot;</span>));
+    <span class='kw'>let</span> <span class='ident'>some_func_symbol</span>: <span class='ident'>Data</span><span class='op'>&lt;</span><span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span>()<span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>lib</span>.<span class='ident'>find_data</span>(<span class='string'>&quot;some_func&quot;</span>));
+    <span class='comment'>// some_func actually points to a function but rust thinks it points to a function pointer.</span>
+    <span class='kw'>let</span> <span class='ident'>some_func</span> <span class='op'>=</span> <span class='ident'>some_func_symbol</span>.<span class='ident'>get</span>();
+    <span class='comment'>// Undefined behavior</span>
+    <span class='ident'>some_func</span>();
+}</pre>
+
+<p>The correct way to do this with <code>find_data</code> is as follows:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>unsafe</span> {
+    <span class='kw'>let</span> <span class='ident'>lib</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>Lib</span>::<span class='ident'>new</span>(<span class='string'>&quot;examplelib.dll&quot;</span>));
+    <span class='comment'>// Get a pointer to the block of memory at &quot;some_func&quot;, this is the function itself.</span>
+    <span class='kw'>let</span> <span class='ident'>some_func_symbol</span>: <span class='ident'>Data</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>lib</span>.<span class='ident'>find_data</span>(<span class='string'>&quot;some_func&quot;</span>));
+    <span class='comment'>// The type of some_func is &amp;u8, a reference to the first byte of `some_func`. We can convert this into a function pointer.</span>
+    <span class='kw'>let</span> <span class='ident'>some_func</span> <span class='op'>=</span> <span class='ident'>some_func_symbol</span>.<span class='ident'>get</span>();
+    <span class='kw'>let</span> <span class='ident'>some_func_ptr</span>: <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> <span class='kw'>fn</span>() <span class='op'>=</span> <span class='ident'>std</span>::<span class='ident'>mem</span>::<span class='ident'>transmute</span>(<span class='ident'>some_func</span>);
+    <span class='comment'>// This works now.</span>
+    <span class='ident'>some_func_ptr</span>();
+}</pre>
+
+<p>For convienience, the second example is provided as the <code>find_func</code> method, which does this error-prone conversion behind the scenes.</p>
+
+<h1 id='comparison-with-other-crates-for-loabing-shared-libraries' class='section-header'><a href='#comparison-with-other-crates-for-loabing-shared-libraries'>Comparison with other crates for loabing shared libraries</a></h1>
+<p>sharedlib was created out of frusteration with the existing crates for loading shared libraries. Below is a list of some of these crates with some information abuot how sharedlib improves upon them.</p>
+
+<ul>
+<li><p><a href="https://crates.io/crates/dylib">dylib</a> provides an extremely simple interface for loading shared libraries. For awhile, this was the standard for loading shared libraries at runtime. Unfortunately, development on dylib has been mostly abandoned and it is no longer supported on the latest versions of the rust compiler.</p></li>
+<li><p><a href="https://crates.io/crates/libloading">libloading</a> provides additional safety guarantees on top of <a href="https://crates.io/crates/dylib">dylib</a> and is more concise than <a href="index.html">sharedlib</a>. <a href="index.html">sharedlib</a> started as a fork of <a href="https://crates.io/crates/libloading">libloading</a>. <a href="index.html">sharedlib</a> provides a few more library types built-in than <a href="https://crates.io/crates/libloading">libloading</a>.</p></li>
+</ul>
+
+<h1 id='frequently-asked-questions' class='section-header'><a href='#frequently-asked-questions'>Frequently asked questions</a></h1>
+<h3 id='what-is-a-shared-library' class='section-header'><a href='#what-is-a-shared-library'>What is a shared library?</a></h3>
+<p>A shared library is a set of functions and variables which can be loaded after a program has been compiled. By loading a library after compilation, the library can be recompiled or changed without recompiling the main program. Shared libraries can even be loaded at runtime. Common shared library filetypes are <em>.dll</em> for windows, <em>.so</em> for unix, and <em>.dylib</em> for osx. For more information about what a shared library is, see <a href="https://en.wikipedia.org/wiki/Library_(computing)#Shared_libraries">wikipedia</a>.</p>
+
+<h3 id='doesnt-rust-already-provide-linking-against-shared-libraries' class='section-header'><a href='#doesnt-rust-already-provide-linking-against-shared-libraries'>Doesn&#39;t rust already provide linking against shared libraries?</a></h3>
+<p>While rust provides linking against shared libraries, it does not provide the ability to load them at runtime. If you only want to use shared libraries that you know about before runtime, you may find not find this crate very useful. On the other hand, if you wish to load something at runtime, like a plugin, you are in the right place.</p>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='error/index.html'
+                                  title='sharedlib::error'>error</a></td>
+                           <td class='docblock short'>
+                                <p>Defines errors which may be returned by <a href="index.html">sharedlib</a>.</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Data.html'
+                                  title='sharedlib::Data'>Data</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to shared data which uses a bound lifetime to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.DataTracked.html'
+                                  title='sharedlib::DataTracked'>DataTracked</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to shared data which allows a user-provided ref-counting implementation to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Func.html'
+                                  title='sharedlib::Func'>Func</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to a shared function which uses a bound lifetime to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.FuncTracked.html'
+                                  title='sharedlib::FuncTracked'>FuncTracked</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to a shared function which allows a user-provided ref-counting implementation to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Lib.html'
+                                  title='sharedlib::Lib'>Lib</a></td>
+                           <td class='docblock short'>
+                                <p>A shared library which uses bound lifetimes to track its <a href="trait.Symbol.html">Symbols</a>.
+The inner library cannot be dropped if at least one loose symbol exists.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.LibTracked.html'
+                                  title='sharedlib::LibTracked'>LibTracked</a></td>
+                           <td class='docblock short'>
+                                <p>A shared library which which allows a user-provided ref-counting implementation to track its <a href="trait.Symbol.html">Symbols</a>.
+The inner library will not be droped until all of teh ref-counts are dropped.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.LibUnsafe.html'
+                                  title='sharedlib::LibUnsafe'>LibUnsafe</a></td>
+                           <td class='docblock short'>
+                                <p>A shared library which does not track its <a href="trait.Symbol.html">Symbols</a>.
+The inner library may be dropped at any time, even if it has loose symbols.</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.Symbol.html'
+                                  title='sharedlib::Symbol'>Symbol</a></td>
+                           <td class='docblock short'>
+                                <p>A symbol from a shared library.</p>
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.DataArc.html'
+                                  title='sharedlib::DataArc'>DataArc</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to shared data which uses atomic ref-counting to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.DataRc.html'
+                                  title='sharedlib::DataRc'>DataRc</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to shared data which uses non-atomic ref-counting to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.DataUnsafe.html'
+                                  title='sharedlib::DataUnsafe'>DataUnsafe</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to shared data which provides no protection against outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.FuncArc.html'
+                                  title='sharedlib::FuncArc'>FuncArc</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to a shared function which uses atomic ref-counting to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.FuncRc.html'
+                                  title='sharedlib::FuncRc'>FuncRc</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to a shared function which uses non-atomic ref-counting to avoid outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.FuncUnsafe.html'
+                                  title='sharedlib::FuncUnsafe'>FuncUnsafe</a></td>
+                           <td class='docblock short'>
+                                <p>A pointer to a shared function which provides no protection against outliving its library.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.LibArc.html'
+                                  title='sharedlib::LibArc'>LibArc</a></td>
+                           <td class='docblock short'>
+                                <p>A shared library which implements <a href="struct.LibTracked.html">LibTracked</a> with atomic ref-counting to track its <a href="trait.Symbol.html">Symbols</a>.</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='type' href='type.LibRc.html'
+                                  title='sharedlib::LibRc'>LibRc</a></td>
+                           <td class='docblock short'>
+                                <p>A shared library which implements <a href="struct.LibTracked.html">LibTracked</a> with atomic ref-counting to track its <a href="trait.Symbol.html">Symbols</a>.</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "sharedlib";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

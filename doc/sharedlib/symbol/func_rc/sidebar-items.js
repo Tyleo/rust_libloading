@@ -1,0 +1,1 @@
+initSidebarItems({"type":[["FuncRc","A pointer to a shared function which uses non-atomic ref-counting to avoid outliving its library."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["DataTracked","A pointer to shared data which allows a user-provided ref-counting implementation to avoid outliving its library."]]});

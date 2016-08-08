@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Data","A pointer to shared data which uses a bound lifetime to avoid outliving its library."]]});
