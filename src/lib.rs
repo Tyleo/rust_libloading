@@ -132,7 +132,7 @@
 //!
 //! * [dylib](https://crates.io/crates/dylib) provides an extremely simple interface for loading shared libraries. For awhile, this was the standard for loading shared libraries at runtime. Unfortunately, development on dylib has been mostly abandoned and it is no longer supported on the latest versions of the rust compiler.
 //!
-//! * [libloading](https://crates.io/crates/libloading) provides some additional safety guarantees on top of [dylib](https://crates.io/crates/dylib). [sharedlib](index.html) even started as a fork of [libloading](https://crates.io/crates/libloading). Unfortunately the interface [libloading](https://crates.io/crates/libloading) provides is extremely inflexible, requiring clients to transmute symbols so they can be used in `struct`s. Additionally, loading data does not work with this library which is a non-starter for many projects.
+//! * [libloading](https://crates.io/crates/libloading) provides additional safety guarantees on top of [dylib](https://crates.io/crates/dylib) and is more concise than [sharedlib](index.html). [sharedlib](index.html) started as a fork of [libloading](https://crates.io/crates/libloading). [sharedlib](index.html) provides a few more library types built-in than [libloading](https://crates.io/crates/libloading).
 //!
 //! # Frequently asked questions
 //!
