@@ -40,13 +40,6 @@ impl Lib {
         ).chain_err(
             || ErrorKind::LibraryOpen(path_to_lib.as_ref().to_path_buf())
         )
-
-        // .map_err(
-        //     |err| {
-        //         let err = LibraryOpen::new(Box::new(err), path_to_lib.as_ref().to_path_buf());
-        //         E::from(err)
-        //     }
-        // )
     }
 
     pub unsafe fn find<T, TStr>(&self, symbol_str: TStr) -> Result<*const T>
