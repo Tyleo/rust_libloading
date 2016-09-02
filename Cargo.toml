@@ -36,4 +36,4 @@ keywords = [
 license = "ISC"
 name = "sharedlib"
 repository = "https://github.com/Tyleo/sharedlib.git"
-version = "4.0.0"
+version = "5.0.0"

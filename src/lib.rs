@@ -160,14 +160,14 @@ mod os;
 
 mod lib_impl;
 
-mod string;
-
 mod symbol;
 
 #[cfg(test)]
 mod test;
 
 mod util;
+
+pub use error::*;
 
 pub use lib_impl::Lib;
 

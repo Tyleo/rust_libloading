@@ -1,11 +1,6 @@
 //! Defines errors which may be returned by [sharedlib](index.html).
 
 use std::path::PathBuf;
-use string::error::library_close as library_close_string;
-use string::error::library_find_symbol as library_find_symbol_string;
-use string::error::library_open as library_open_string;
-use string::error::os_error as os_error_string;
-use string::error::os_error_failure as os_error_failure_string;
 
 error_chain! {
     types { }
@@ -16,51 +11,51 @@ error_chain! {
 
     errors {
         LibraryClose {
-            description(library_close_string::description())
+            description("A shared library failed to close.")
             display(
                 "{}",
-                library_close_string::display_1()
+                "A shared library failed to close.",
             )
         }
 
         LibraryFindSymbol(symbol: String) {
-            description(library_find_symbol_string::description())
+            description("Failed to find a symbol in a shared library.")
             display(
                 "{}{}{}",
-                library_find_symbol_string::display_1(),
+                "The search for symbol, '",
                 symbol,
-                library_find_symbol_string::display_2()
+                "', from a shared library failed.",
             )
         }
 
         LibraryOpen(path_to_lib: PathBuf) {
-            description(library_open_string::description())
+            description("A shared library failed to open.")
             display(
                 "{}{}{}",
-                library_open_string::display_1(),
+                "The shared library at path, '",
                 path_to_lib.to_string_lossy(),
-                library_open_string::display_2()
+                "', failed to open.",
             )
         }
 
         OsError(cause: String, function_called: String) {
-            description(os_error_string::description())
+            description("A call to a native function failed.")
             display(
                 "{}{}{}{}",
-                os_error_string::display_1(),
+                "A call to the native function, '",
                 function_called,
-                os_error_string::display_2(),
+                "', failed. Cause\n",
                 cause
             )
         }
 
         OsErrorFailure(function_called: String) {
-            description(os_error_failure_string::description())
+            description("A call to a native function failed but the operating system reported success.")
             display(
                 "{}{}{}",
-                os_error_failure_string::display_1(),
+                "A call to the native function, '",
                 function_called,
-                os_error_failure_string::display_2()
+                "', failed but the operating system reported success.",
             )
         }
     }
