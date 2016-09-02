@@ -1,6 +1,5 @@
 //! Defines errors which may be returned by [sharedlib](index.html).
 
-use std::io;
 use std::path::PathBuf;
 use string::error::library_close as library_close_string;
 use string::error::library_find_symbol as library_find_symbol_string;
@@ -13,9 +12,7 @@ error_chain! {
 
     links { }
 
-    foreign_links {
-        io::Error, IoError;
-    }
+    foreign_links { }
 
     errors {
         LibraryClose {
