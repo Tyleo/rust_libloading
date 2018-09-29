@@ -3,6 +3,7 @@ use os::unix::external;
 use os::unix::OkOrDlerror;
 use os::unix::RTLD_LAZY;
 use util;
+use std::ffi::CString;
 use std::mem;
 use std::path::Path;
 use std::os::raw::c_char;
@@ -16,15 +17,13 @@ pub struct Lib {
 impl Lib {
     pub unsafe fn new<TPath>(path_to_lib: TPath) -> Result<Lib>
         where TPath: AsRef<Path> {
-        let path_to_lib_str =
-            path_to_lib
-                .as_ref()
-                .to_string_lossy();
-        let path_to_lib_c_str = path_to_lib_str.as_ptr() as *const c_char;
+        let path_to_lib_c_str = CString::new(path_to_lib.as_ref().to_string_lossy().as_ref())
+            .chain_err( || ErrorKind::LibraryOpen(path_to_lib.as_ref().to_path_buf()))?;
+        let path_to_lib_c_ptr = path_to_lib_c_str.as_ptr();
 
         util::error_guard(
             || {
-                let result = external::dlopen(path_to_lib_c_str, RTLD_LAZY);
+                let result = external::dlopen(path_to_lib_c_ptr, RTLD_LAZY);
 
                 if result.is_null() {
                     None
