@@ -127,8 +127,8 @@
 //!
 //! For convienience, the second example is provided as the `find_func` method, which does this error-prone conversion behind the scenes.
 //!
-//! # Comparison with other crates for loabing shared libraries
-//! sharedlib was created out of frusteration with the existing crates for loading shared libraries. Below is a list of some of these crates with some information abuot how sharedlib improves upon them.
+//! # Comparison with other crates for loading shared libraries
+//! sharedlib was created out of frusteration with the existing crates for loading shared libraries. Below is a list of some of these crates with some information about how sharedlib improves upon them.
 //!
 //! * [dylib](https://crates.io/crates/dylib) provides an extremely simple interface for loading shared libraries. For awhile, this was the standard for loading shared libraries at runtime. Unfortunately, development on dylib has been mostly abandoned and it is no longer supported on the latest versions of the rust compiler.
 //!
