@@ -3,7 +3,7 @@ rsFiles.include "**/*.rs"
 
 task cargoBuild(type: Exec) {
     commandLine "cargo", "build"
-    inputs.file(rsFiles)
+    inputs.files(rsFiles)
     outputs.file("target/debug/examplelib.dll")
 }
 
